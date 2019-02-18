@@ -1,0 +1,176 @@
+VISTE SWITCH
+------------
+
+create vlan HSub224
+configure vlan HSub224 tag 4024
+create vlan HSub225
+configure vlan HSub225 tag 4025
+create vlan HSub226
+configure vlan HSub226 tag 4026
+create vlan HSub231
+configure vlan HSub231 tag 4031
+create vlan HSub232
+configure vlan HSub232 tag 4032
+create vlan HSub233
+configure vlan HSub233 tag 4033
+create vlan HSub249
+configure vlan HSub249 tag 4049
+create vlan HSub254
+configure vlan HSub254 tag 4054
+
+create vlan HSub028
+configure vlan HSub028 tag 4028
+create vlan HSub081
+configure vlan HSub081 tag 4081
+create vlan HSub082
+configure vlan HSub082 tag 4082
+
+conf vlan HSub224 add ports 4:46, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan HSub225 add ports 4:46, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan HSub226 add ports 4:46, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan HSub231 add ports 4:46, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan HSub232 add ports 4:46, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan HSub233 add ports 4:46, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan HSub249 add ports 4:46, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan HSub254 add ports 4:46, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+
+conf vlan HSub028 add ports 4:46, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan HSub081 add ports 4:46, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan HSub082 add ports 4:46, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+
+Error: Ports cannot be added to vlan. Current free memory is less than 30 Mb
+
+-------------------------------------------------------------------------------------------------------------------
+
+NAP7 PRE-PROD FW
+----------------
+
+set interface ethernet2/6.24 tag 4024 zone "Hollywood"
+set interface ethernet2/6.24 ip 10.6.224.1/24
+set interface ethernet2/6.24 route
+
+set interface ethernet2/6.25 tag 4025 zone "Hollywood"
+set interface ethernet2/6.25 ip 10.6.225.1/24
+set interface ethernet2/6.25 route
+
+set interface ethernet2/6.26 tag 4026 zone "Hollywood"
+set interface ethernet2/6.26 ip 10.6.226.1/24
+set interface ethernet2/6.26 route
+
+set interface ethernet2/6.31 tag 4031 zone "Hollywood"
+set interface ethernet2/6.31 ip 10.6.231.1/24
+set interface ethernet2/6.31 route
+
+set interface ethernet2/6.32 tag 4032 zone "Hollywood"
+set interface ethernet2/6.32 ip 10.6.232.1/24
+set interface ethernet2/6.32 route
+
+set interface ethernet2/6.33 tag 4033 zone "Hollywood"
+set interface ethernet2/6.33 ip 10.6.233.1/24
+set interface ethernet2/6.33 route
+
+set interface ethernet2/6.49 tag 4049 zone "Hollywood"
+set interface ethernet2/6.49 ip 10.6.249.1/24
+set interface ethernet2/6.49 route
+
+set interface ethernet2/6.54 tag 4054 zone "Hollywood"
+set interface ethernet2/6.54 ip 10.6.254.1/24
+set interface ethernet2/6.54 route
+
+
+set interface ethernet2/6.28 tag 4028 zone "Hollywood"
+set interface ethernet2/6.28 ip 10.241.28.1/24
+set interface ethernet2/6.28 route
+
+set interface ethernet2/6.81 tag 4081 zone "Hollywood"
+set interface ethernet2/6.81 ip 10.241.81.1/24
+set interface ethernet2/6.81 route
+
+set interface ethernet2/6.82 tag 4082 zone "Hollywood"
+set interface ethernet2/6.82 ip 10.241.82.1/24
+set interface ethernet2/6.82 route
+
+
+set interface "loopback.7" mip 172.31.224.0 host 10.6.224.0 netmask 255.255.255.0 vr "hollywood-vr"
+set interface "loopback.7" mip 172.31.225.0 host 10.6.225.0 netmask 255.255.255.0 vr "hollywood-vr"
+set interface "loopback.7" mip 172.31.226.0 host 10.6.226.0 netmask 255.255.255.0 vr "hollywood-vr"
+set interface "loopback.7" mip 172.31.231.0 host 10.6.231.0 netmask 255.255.255.0 vr "hollywood-vr"
+set interface "loopback.7" mip 172.31.232.0 host 10.6.232.0 netmask 255.255.255.0 vr "hollywood-vr"
+set interface "loopback.7" mip 172.31.233.0 host 10.6.233.0 netmask 255.255.255.0 vr "hollywood-vr"
+set interface "loopback.7" mip 172.31.249.0 host 10.6.249.0 netmask 255.255.255.0 vr "hollywood-vr"
+set interface "loopback.7" mip 172.31.254.0 host 10.6.254.0 netmask 255.255.255.0 vr "hollywood-vr"
+
+set interface "loopback.7" mip 172.31.28.0 host 10.241.28.0 netmask 255.255.255.0 vr "hollywood-vr"
+set interface "loopback.7" mip 172.31.81.0 host 10.241.81.0 netmask 255.255.255.0 vr "hollywood-vr"
+set interface "loopback.7" mip 172.31.82.0 host 10.241.82.0 netmask 255.255.255.0 vr "hollywood-vr"
+
+
+set interface ethernet2/6.24  protocol ospf area 0.0.0.1
+set interface ethernet2/6.24  protocol ospf reduce-flooding
+set interface ethernet2/6.24  protocol ospf passive
+set interface ethernet2/6.24  protocol ospf enable
+
+set interface ethernet2/6.25  protocol ospf area 0.0.0.1
+set interface ethernet2/6.25  protocol ospf reduce-flooding
+set interface ethernet2/6.25  protocol ospf passive
+set interface ethernet2/6.25  protocol ospf enable
+
+set interface ethernet2/6.26  protocol ospf area 0.0.0.1
+set interface ethernet2/6.26  protocol ospf reduce-flooding
+set interface ethernet2/6.26  protocol ospf passive
+set interface ethernet2/6.26  protocol ospf enable
+
+set interface ethernet2/6.31  protocol ospf area 0.0.0.1
+set interface ethernet2/6.31  protocol ospf reduce-flooding
+set interface ethernet2/6.31  protocol ospf passive
+set interface ethernet2/6.31  protocol ospf enable
+
+set interface ethernet2/6.32  protocol ospf area 0.0.0.1
+set interface ethernet2/6.32  protocol ospf reduce-flooding
+set interface ethernet2/6.32  protocol ospf passive
+set interface ethernet2/6.32  protocol ospf enable
+
+set interface ethernet2/6.33  protocol ospf area 0.0.0.1
+set interface ethernet2/6.33  protocol ospf reduce-flooding
+set interface ethernet2/6.33  protocol ospf passive
+set interface ethernet2/6.33  protocol ospf enable
+
+set interface ethernet2/6.49  protocol ospf area 0.0.0.1
+set interface ethernet2/6.49  protocol ospf reduce-flooding
+set interface ethernet2/6.49  protocol ospf passive
+set interface ethernet2/6.49  protocol ospf enable
+
+set interface ethernet2/6.54  protocol ospf area 0.0.0.1
+set interface ethernet2/6.54  protocol ospf reduce-flooding
+set interface ethernet2/6.54  protocol ospf passive
+set interface ethernet2/6.54  protocol ospf enable
+
+
+set interface ethernet2/6.28  protocol ospf area 0.0.0.1
+set interface ethernet2/6.28  protocol ospf reduce-flooding
+set interface ethernet2/6.28  protocol ospf passive
+set interface ethernet2/6.28  protocol ospf enable
+
+set interface ethernet2/6.81  protocol ospf area 0.0.0.1
+set interface ethernet2/6.81  protocol ospf reduce-flooding
+set interface ethernet2/6.81  protocol ospf passive
+set interface ethernet2/6.81  protocol ospf enable
+
+set interface ethernet2/6.82  protocol ospf area 0.0.0.1
+set interface ethernet2/6.82  protocol ospf reduce-flooding
+set interface ethernet2/6.82  protocol ospf passive
+set interface ethernet2/6.82  protocol ospf enable
+
+
+set int ethernet2/6.24 manage ping
+set int ethernet2/6.25 manage ping
+set int ethernet2/6.26 manage ping
+set int ethernet2/6.31 manage ping
+set int ethernet2/6.32 manage ping
+set int ethernet2/6.33 manage ping
+set int ethernet2/6.49 manage ping
+set int ethernet2/6.54 manage ping
+
+set int ethernet2/6.28 manage ping
+set int ethernet2/6.81 manage ping
+set int ethernet2/6.82 manage ping

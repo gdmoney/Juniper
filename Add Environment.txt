@@ -1,0 +1,137 @@
+NAP7 VISTE Switch
+-----------------
+
+create vlan "HSub012"
+configure vlan HSub012 tag 4012
+create vlan "HSub064"
+configure vlan HSub064 tag 4064
+create vlan "HSub250"
+configure vlan HSub250 tag 4050
+
+conf vlan HSub012 add ports 4:46, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan HSub064 add ports 4:46, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan HSub250 add ports 4:46, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+
+
+NAP7 PreProd FW
+---------------
+
+set vrouter name hollywood-vr
+
+set zone name Hollywood
+set zone name "Hollywood VPN"
+
+set zone Hollywood vrouter hollywood-vr
+set zone "Hollywood VPN" vrouter hollywood-vr
+
+set int ethernet2/6.8  tag 4050 zone Hollywood
+set int ethernet2/6.10 tag 4064 zone Hollywood
+set int ethernet2/6.12 tag 4012 zone Hollywood
+
+set int ethernet2/6.8  ip 10.6.250.1/24
+set int ethernet2/6.8  route
+set int ethernet2/6.10 ip 10.241.64.1/24
+set int ethernet2/6.10 route
+set int ethernet2/6.12 ip 10.241.12.1/24
+set int ethernet2/6.12 route
+
+set int ethernet2/6.8  manage ping
+set int ethernet2/6.10 manage ping
+set int ethernet2/6.12 manage ping
+
+set int ethernet3/1.7 tag 4007 zone "Hollywood VPN"
+set int ethernet3/1.7 ip 10.0.7.32/24
+set int ethernet3/1.7 route
+
+set int loopback.7 zone Hollywood
+set int loopback.7 ip 172.31.0.1/16
+set int loopback.7 nat
+set int loopback.7 ip manageable
+set int loopback.7 manage ping
+
+set int loopback.7 mip 172.31.250.0 host 10.6.250.0  netmask 255.255.255.0 vr hollywood-vr
+set int loopback.7 mip 172.31.12.0  host 10.241.12.0 netmask 255.255.255.0 vr hollywood-vr
+set int loopback.7 mip 172.31.64.0  host 10.241.64.0 netmask 255.255.255.0 vr hollywood-vr
+
+set vrouter hollywood-vr
+unset auto-route-export
+set router-id 169.254.7.32
+set prot ospf
+set enable
+set advertise-def-route metric 1 metric-type 1
+set area 0.0.0.1
+set area 0.0.0.1 range 10.6.224.0 255.255.224.0 advertise
+set area 0.0.0.1 range 10.241.0.0 255.255.0.0 advertise
+
+set vrouter hollywood-vr
+set access-list 10
+set access-list 10 permit ip 172.23.2.0/24 5
+set access-list 10 deny ip 0.0.0.0/0 25
+set route-map name "IMPORT-TFS_NET" permit 10
+set match ip 10
+exit
+set route-map name "REDIST-TFS_NET" permit 20
+set match ip 10
+exit
+set import-from vrouter "trust-vr" route-map "IMPORT-TFS_NET" protocol ospf
+
+set route 172.27.0.0/16 vrouter "jester-vr" preference 20 description "Jester"
+set route 172.26.0.0/16 vrouter "maverick-vr" preference 20 description "Maverick"
+set route 172.25.0.0/16 vrouter "goose-vr" preference 20 description "Goose"
+set route 172.24.0.0/16 vrouter "viper-vr" preference 20 description "Viper"
+set route 172.30.0.0/16 vrouter "staging-vr" preference 20 description "Staging"
+set route 172.29.0.0/16 vrouter "development-vr" preference 20 description "Development"
+set route 216.235.180.0/24 vrouter "trust-vr" preference 20 description "SDC/Elavon"
+set route 216.76.27.0/24 vrouter "trust-vr" preference 20 description "SVS Gift Card"
+set route 206.253.180.0/24 vrouter "trust-vr" preference 20 description "Paymentech"
+
+set route 0.0.0.0/0 vrouter "trust-vr" preference 20 metric 1
+set protocol ospf
+set redistribute route-map "REDIST-TFS_NET" protocol imported
+
+
+set vrouter trust-vr
+set access-list 10 permit ip 172.31.0.0/16 70
+set export-to vrouter hollywood-vr route-map DMZ protocol connected
+set route 172.31.0.0/16 vrouter "hollywood-vr" preference 20 description Hollywood
+
+
+set vrouter jester-vr
+set route 172.31.0.0/16 vrouter "hollywood-vr" preference 20 description Hollywood
+
+set vrouter maverick-vr
+set route 172.31.0.0/16 vrouter "hollywood-vr" preference 20 description Hollywood
+
+set vrouter goose-vr
+set route 172.31.0.0/16 vrouter "hollywood-vr" preference 20 description Hollywood
+
+set vrouter viper-vr
+set route 172.31.0.0/16 vrouter "hollywood-vr" preference 20 description Hollywood
+
+set vrouter staging-vr
+set route 172.31.0.0/16 vrouter "hollywood-vr" preference 20 description Hollywood
+
+set vrouter development-vr
+set route 172.31.0.0/16 vrouter "hollywood-vr" preference 20 description Hollywood
+
+
+set interface loopback.7 protocol ospf area 0.0.0.0
+set interface loopback.7 protocol ospf reduce-flooding
+set interface loopback.7 protocol ospf passive
+set interface loopback.7 protocol ospf enable
+set interface loopback.7 protocol ospf retransmit-interval 5
+set interface loopback.7 protocol ospf cost 1
+
+set interface ethernet2/6.8  protocol ospf area 0.0.0.1
+set interface ethernet2/6.8  protocol ospf reduce-flooding
+set interface ethernet2/6.8  protocol ospf passive
+set interface ethernet2/6.8  protocol ospf enable
+set interface ethernet2/6.10 protocol ospf area 0.0.0.1
+set interface ethernet2/6.10 protocol ospf reduce-flooding
+set interface ethernet2/6.10 protocol ospf passive
+set interface ethernet2/6.10 protocol ospf enable
+set interface ethernet2/6.12 protocol ospf area 0.0.0.1
+set interface ethernet2/6.12 protocol ospf reduce-flooding
+set interface ethernet2/6.12 protocol ospf passive
+set interface ethernet2/6.12 protocol ospf enable
+

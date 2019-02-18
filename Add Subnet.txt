@@ -1,0 +1,132 @@
+NAP7 VISTE Switch
+-----------------
+
+create vlan JSimp
+configure vlan JSimp tag 81
+create vlan JSimpDB
+configure vlan JSimpDB tag 82
+
+create vlan MSimp
+configure vlan MSimp tag 1081
+create vlan MSimpDB
+configure vlan MSimpDB tag 1082
+
+create vlan GSimp
+configure vlan GSimp tag 2081
+create vlan GSimpDB
+configure vlan GSimpDB tag 2082
+
+create vlan VSimp
+configure vlan VSimp tag 3081
+create vlan VSimpDB
+configure vlan VSimpDB tag 3082
+
+
+conf vlan JSimp   add ports 1:45, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan JSimpDB add ports 1:45, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan MSimp   add ports 1:46, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan MSimpDB add ports 1:46, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan GSimp   add ports 1:47, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan GSimpDB add ports 1:47, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan VSimp   add ports 1:48, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+conf vlan VSimpDB add ports 1:48, 1:1-32, 2:1-42, 2:44-48, 3:1-40, 3:43-48, 4:1-32, 5:1-48, 6:1-40, 6:42-48 tagged
+
+
+NAP7 PreProd
+------------
+
+set interface ethernet2/1.81 tag   81 zone Jester
+set interface ethernet2/1.82 tag   82 zone Jester
+
+set interface ethernet2/2.81 tag 1081 zone Maverick
+set interface ethernet2/2.82 tag 1082 zone Maverick
+
+set interface ethernet2/3.81 tag 2081 zone Goose
+set interface ethernet2/3.82 tag 2082 zone Goose
+
+set interface ethernet2/4.81 tag 3081 zone Viper
+set interface ethernet2/4.82 tag 3082 zone Viper
+
+
+set interface ethernet2/1.81 ip 10.241.81.1/24
+set interface ethernet2/1.81 route
+set interface ethernet2/1.82 ip 10.241.82.1/24
+set interface ethernet2/1.82 route
+
+set interface ethernet2/2.81 ip 10.241.81.1/24
+set interface ethernet2/2.81 route
+set interface ethernet2/2.82 ip 10.241.82.1/24
+set interface ethernet2/2.82 route
+
+set interface ethernet2/3.81 ip 10.241.81.1/24
+set interface ethernet2/3.81 route
+set interface ethernet2/3.82 ip 10.241.82.1/24
+set interface ethernet2/3.82 route
+
+set interface ethernet2/4.81 ip 10.241.81.1/24
+set interface ethernet2/4.81 route
+set interface ethernet2/4.82 ip 10.241.82.1/24
+set interface ethernet2/4.82 route
+
+
+set interface loopback.2 mip 172.27.81.0 host 10.241.81.0 netmask 255.255.255.0 vr jester-vr
+set interface loopback.2 mip 172.27.82.0 host 10.241.82.0 netmask 255.255.255.0 vr jester-vr
+
+set interface loopback.3 mip 172.26.81.0 host 10.241.81.0 netmask 255.255.255.0 vr maverick-vr
+set interface loopback.3 mip 172.26.82.0 host 10.241.82.0 netmask 255.255.255.0 vr maverick-vr
+
+set interface loopback.4 mip 172.25.81.0 host 10.241.81.0 netmask 255.255.255.0 vr goose-vr
+set interface loopback.4 mip 172.25.82.0 host 10.241.82.0 netmask 255.255.255.0 vr goose-vr
+
+set interface loopback.5 mip 172.24.81.0 host 10.241.81.0 netmask 255.255.255.0 vr viper-vr
+set interface loopback.5 mip 172.24.82.0 host 10.241.81.0 netmask 255.255.255.0 vr viper-vr
+
+
+set interface ethernet2/1.81 manage ping
+set interface ethernet2/1.82 manage ping
+set interface ethernet2/2.81 manage ping
+set interface ethernet2/2.82 manage ping
+set interface ethernet2/3.81 manage ping
+set interface ethernet2/3.82 manage ping
+set interface ethernet2/4.81 manage ping
+set interface ethernet2/4.82 manage ping
+
+
+set interface ethernet2/1.81 protocol ospf area 0.0.0.0
+set interface ethernet2/1.81 protocol ospf reduce-flooding
+set interface ethernet2/1.81 protocol ospf passive
+set interface ethernet2/1.81 protocol ospf enable
+set interface ethernet2/1.82 protocol ospf area 0.0.0.0
+set interface ethernet2/1.82 protocol ospf reduce-flooding
+set interface ethernet2/1.82 protocol ospf passive
+set interface ethernet2/1.82 protocol ospf enable
+
+set interface ethernet2/2.81 protocol ospf area 0.0.0.0
+set interface ethernet2/2.81 protocol ospf reduce-flooding
+set interface ethernet2/2.81 protocol ospf passive
+set interface ethernet2/2.81 protocol ospf enable
+set interface ethernet2/2.82 protocol ospf area 0.0.0.0
+set interface ethernet2/2.82 protocol ospf reduce-flooding
+set interface ethernet2/2.82 protocol ospf passive
+set interface ethernet2/2.82 protocol ospf enable
+
+set interface ethernet2/3.81 protocol ospf area 0.0.0.0
+set interface ethernet2/3.81 protocol ospf reduce-flooding
+set interface ethernet2/3.81 protocol ospf passive
+set interface ethernet2/3.81 protocol ospf enable
+set interface ethernet2/3.82 protocol ospf area 0.0.0.0
+set interface ethernet2/3.82 protocol ospf reduce-flooding
+set interface ethernet2/3.82 protocol ospf passive
+set interface ethernet2/3.82 protocol ospf enable
+
+set interface ethernet2/4.81 protocol ospf area 0.0.0.0
+set interface ethernet2/4.81 protocol ospf reduce-flooding
+set interface ethernet2/4.81 protocol ospf passive
+set interface ethernet2/4.81 protocol ospf enable
+set interface ethernet2/4.82 protocol ospf area 0.0.0.0
+set interface ethernet2/4.82 protocol ospf reduce-flooding
+set interface ethernet2/4.82 protocol ospf passive
+set interface ethernet2/4.82 protocol ospf enable
+
+
+

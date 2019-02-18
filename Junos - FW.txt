@@ -1,0 +1,18 @@
+
+show security flow session ...
+
+#clear security flow session
+
+show applications
+
+set interfaces fxp0 disable
+
+set security flow tcp-mss all-tcp mss 1350
+set security flow tcp-session no-sequence-check
+set applications application port_59532 term 1 inactivity-timeout 3600
+
+set protocols bgp group EBGP-SWITCH-PRI  neighbor 216.115.65.137 authentication-key Calvin
+
+
+
+

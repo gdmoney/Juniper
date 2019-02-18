@@ -1,0 +1,88 @@
+INITIAL
+-------
+set system root-authentication plain-text-password
+set system login user cfnadmin class super-user
+set system login user cfnadmin authentication plain-text-password
+set system services web https system-generated-certificate
+set system services ssh root-login deny
+
+request system configuration resque save
+set interfaces me0 unit 0 family inet address 10.191.65.253/24
+
+
+VLANs
+-----
+set vlans Data vlan-id 10
+set vlans Voice vlan-id 20
+set vlans Printer vlan-id 30
+
+set interfaces vlan unit 10 family inet address 10.188.10.3/24
+set vlans Data l3-interface vlan.10
+
+show vlans
+
+
+INTERFACES
+----------
+set vlans Data interface ge-0/0/0.0
+set vlans Voice interface ge-0/0/2.0
+set vlans Printer interface ge-0/0/4.0
+
+set interfaces ge-0/1/1 unit 0 family ethernet-switching port-mode trunk vlan members all
+
+set interfaces interface-range edge member "ge-0/0/[2-47]"
+
+show interfaces terse
+show ethernet-switching interfaces brief
+
+
+LAG
+---
+set chassis aggregated-devices ethernet device-count 1
+
+delete interfaces ge-0/0/0
+delete interfaces ge-0/0/1
+set interfaces ge-0/0/0 ether-options 802.3ad ae0
+set interfaces ge-0/0/1 ether-options 802.3ad ae0
+
+set interfaces ae0 aggregated-ether-options minimum-links 1
+set interfaces ae0 aggregated-ether-options link-speed 1g
+set interfaces ae0 aggregated-ether-options lacp active
+set interfaces ae0 unit 0 family ethernet-switching port-mode trunk vlan members all
+
+show lacp interface ae0
+
+
+STP
+---
+set protocols vstp vlan all		[makes it VSTP+RSTP, default is RSTP, match Cisco switch]
+set protocols rstp interface edge edge	[portfast]
+set ethernet-switching-options bpdu-block interface edge	[BPDU Guard]
+set protocols rstp interface edge no-root-port			[Root Guard]
+
+show spanning-tree bridge
+
+
+ROUTING
+-------
+set routing-options static route 10.191.80.0/24 next-hop 10.191.65.1
+
+
+SYSTEM
+------
+request system reboot/power-off/software add|delete|rollback/
+request support information
+
+show system uptime/users/connections/processes/software/storage/alarms
+show chassis alarms/cluster/environment/forwarding/fpc/hardware/pic/routing-engine
+
+
+MISC
+----
+show | compare rollback #	[view uncommitted changes]
+
+show log messages
+
+monitor traffic interface #	[debug]
+monitor interface #		[stats]
+monitor interface traffic

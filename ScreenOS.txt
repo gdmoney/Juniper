@@ -1,0 +1,54 @@
+unset flow no-tcp-seq-check	> TCP sequence checking is enabled
+unset flow tcp-syn-check	> ensure full 3-way handshake is completed before a session is created
+unset flow tcp-syn-bit-check	> check only the existense of SYN packet before a session is created
+get flow
+
+get route | include 10.255
+get route summary
+get route ip 10.255.0.0
+get route id X (where X is ID of route in question)
+
+get protocol ospf area
+get protocol ospf auth
+get protocol ospf config
+get protocol ospf int
+get protocol ospf neighbor
+get protocol ospf routes-redistribute
+get protocol ospf rules-redistribute
+get protocol ospf database
+get protocol ospf database detail 
+
+get tech
+get event
+get nvram
+get perf cpu detail
+get perf session detail
+get os task
+get task ospf
+
+get clock
+get asic demux
+get sat 0 d
+get sat 0 x-c
+get sat 0 fr
+get sat 0 c
+get sat 0 s
+
+exec nsrp sync global-config check-sum
+exec nsrp sync global-config diff
+exec nsrp sync global-config save
+
+
+Debug
+-----
+
+get ff
+get debug
+
+unset ff
+undebug all
+clear dbuf
+
+set ff dst-ip 216.235.180.54
+debug flow basic
+get db stream

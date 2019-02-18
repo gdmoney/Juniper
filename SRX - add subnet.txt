@@ -1,0 +1,60 @@
+reth1 {
+        unit 21 {
+            description 734-Ricoh;
+            vlan-id 1021;
+            family inet {
+                address 10.255.21.1/24;
+            }
+        }
+        unit 22 {
+            description 740-Ricoh;
+            vlan-id 1022;
+            family inet {
+                address 10.255.22.1/24;
+
+
+forwarding-options {
+    helpers {
+        bootp {
+            relay-agent-option;
+            description "InfoBlox Grid";
+            server 10.6.250.150;
+            server 10.241.2.16;
+            client-response-ttl 20;
+            interface {
+                reth1.21;
+                reth1.22;
+
+
+protocols {
+    ospf {
+          area 0.0.0.51 {
+
+            interface reth1.21 {
+                passive;
+                metric 10;
+            }
+            interface reth1.22 {
+                passive;
+                metric 10;
+
+
+security {
+    zones {
+       security-zone Ricoh {
+            interfaces {
+                reth1.21 {
+                    host-inbound-traffic {
+                        system-services {
+                            ping;
+                            dhcp;
+                            bootp;
+                        }
+                    }
+                }
+                reth1.22 {
+                    host-inbound-traffic {
+                        system-services {
+                            ping;
+                            dhcp;
+                            bootp;

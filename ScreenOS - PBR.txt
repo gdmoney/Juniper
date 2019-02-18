@@ -1,0 +1,59 @@
+WiFi FW
+-------
+
+WiFi-VR
+-------
+set access-list extended 50 src-ip 192.168.29.0/24 dst-ip 10.0.0.0/8 protocol any entry 10
+set access-list extended 50 src-ip 192.168.29.0/24 dst-ip 172.16.0.0/12 protocol any entry 20
+set access-list extended 50 src-ip 192.168.29.0/24 dst-ip 192.168.0.0/16 protocol any entry 30
+
+set access-list extended 60 src-ip 192.168.29.0/24 dst-ip 0.0.0.0/0 protocol any entry 10
+
+set match-group name SoBe-Prod
+set match-group SoBe-Prod ext-acl 50 match-entry 1
+set match-group name SoBe-Internet
+set match-group SoBe-Internet ext-acl 60 match-entry 1
+
+set action-group name SoBe-Prod
+set action-group SoBe-Prod next-hop 10.6.0.58 action-entry 1
+set action-group name SoBe-Internet
+set action-group SoBe-Internet next-hop 10.6.0.102 action-entry 1
+
+set pbr policy name SoBe
+set pbr policy SoBe match-group SoBe-Prod action-group SoBe-Prod 1
+set pbr policy SoBe match-group SoBe-Internet action-group SoBe-Internet 2
+
+set route 10.6.0.58/32 interface e0/0
+set route 10.6.0.102/32 interface e0/3
+
+
+Global
+------
+set interface e0/2.29 pbr
+set zone WiFi-SoBe pbr SoBe
+
+------------------------------------------------------------------------------------------------
+
+Dirty FW
+--------
+
+DMZ-VR
+------
+set access-list extended 60 src-ip 192.168.29.0/24 dst-ip 0.0.0.0/0 protocol any entry 10
+
+set match-group name SoBe-Internet
+set match-group SoBe-Internet ext-acl 60 match-entry 1
+
+set action-group name SoBe-Internet
+set action-group SoBe-Internet next-hop 24.120.144.33 action-entry 1
+
+set pbr policy name SoBe
+set pbr policy SoBe match-group SoBe-Internet action-group SoBe-Internet 1
+
+set route 24.120.144.33/32 interface e0/0
+
+
+Global
+------
+set interface e0/3 pbr
+set zone DMZ pbr SoBe
